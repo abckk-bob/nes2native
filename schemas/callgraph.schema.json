@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NES Bank-aware Callgraph",
+  "type": "object",
+  "properties": {
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "addr": {
+            "type": "string"
+          },
+          "bank": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "addr",
+          "bank"
+        ]
+      }
+    },
+    "calls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "jsr",
+              "jmp",
+              "fallthrough"
+            ]
+          },
+          "via_bank": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "type"
+        ]
+      }
+    }
+  },
+  "required": [
+    "functions",
+    "calls"
+  ]
+}

@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+# macOS
+.DS_Store
+
+# Project-specific
+.env
+out/
+ghidra/proj/
+cdl/*.cdl
+!cdl/.gitkeep
+
+# ROM files (optional: remove if you want to track them)
+# *.nes
