@@ -91,6 +91,10 @@ brew install graphviz
 dot -V
 ```
 
+**Note**: Ghidra requires Java 17+. If `brew install --cask temurin` fails due to sudo requirements, manually install from:
+- https://adoptium.net/temurin/releases/ (select macOS ARM64, JDK 17+)
+- After installation, verify: `java -version`
+
 #### Ubuntu/Debian
 ```bash
 sudo apt install graphviz
