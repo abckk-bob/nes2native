@@ -1,12 +1,20 @@
 # Makefile — NES UNROM → Swift/Kotlin 移植 前処理
-ROM ?= roms/GAME_UXROM.nes
-CDL ?= cdl/GAME.cdl
+
+# Load environment variables from .env if it exists
+ifneq (,$(wildcard .env))
+    include .env
+    export
+endif
+
+ROM ?= zanac.nes
+CDL ?= cdl/zanac.cdl
 
 .PHONY: cdl ghidra all clean
 
 cdl:
 	@echo "[FCEUX] collecting CDL..."
-	fceux --nogui 1 --loadlua fceux/run_inputs.lua $(ROM)
+	@mkdir -p cdl
+	fceux --loadlua fceux/run_inputs.lua $(ROM)
 
 ghidra:
 	@echo "[Ghidra] headless analysis..."

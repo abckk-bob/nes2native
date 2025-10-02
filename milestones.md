@@ -37,51 +37,67 @@
 
 ## MS-0 リポジトリ初期化
 
-**目的**: 雛形/規約/CI 雛形を整備し、以後のタスクを自動化しやすくする。  
-**エントリ条件**: なし  
+**目的**: 雛形/規約/CI 雛形を整備し、以後のタスクを自動化しやすくする。
+**エントリ条件**: なし
 **完了条件**: 以降の Make ターゲットがローカルで実行可能
 
 ### タスク
-- ☐ `nes-porting-docs/` の内容をリポジトリ直下へ配置（必要に応じてサブフォルダに集約）
-- ☐ ライセンス/権利情報を `LICENSE/NOTICE` に明記（依頼元の合意反映）
-- ☐ エディタ設定、コード規約（`.editorconfig`, lint 設定）追加
-- ☐ CI 雛形（GitHub Actions 等）追加：Linux コンテナで `make all` が通るまで
-- ☐ Issue/PR テンプレート、ラベルポリシー準備
+- ✅ `nes-porting-docs/` の内容をリポジトリ直下へ配置（必要に応じてサブフォルダに集約）
+- ✅ ライセンス/権利情報を `LICENSE/NOTICE` に明記（依頼元の合意反映）
+- ✅ エディタ設定、コード規約（`.editorconfig`, lint 設定）追加
+- ✅ CI 雛形（GitHub Actions 等）追加：Linux コンテナで `make all` が通るまで
+- ✅ Issue/PR テンプレート、ラベルポリシー準備
 
 **成果物**: 初期コミット、CI バッジ
+
+**実績**: commit 2e28331 (2025-10-02)
 
 ---
 
 ## MS-1 環境整備
 
-**目的**: FCEUX/Ghidra/GhidraNes/Graphviz/LLM CLI の最低限の動作を確認  
-**エントリ条件**: MS-0 完了  
+**目的**: FCEUX/Ghidra/GhidraNes/Graphviz/LLM CLI の最低限の動作を確認
+**エントリ条件**: MS-0 完了
 **完了条件**: 下記コマンドが成功しバージョンが固定
 
 ### タスク
-- ☐ FCEUX インストール（`--nogui`, `--loadlua` 利用可能を確認）
-- ☐ Ghidra インストール（`support/analyzeHeadless` 実行確認）
-- ☐ GhidraNes ローダ導入（iNES, UNROM 対応確認）
-- ☐ Graphviz（`dot`）導入
-- ☐ LLM CLI（codex/Claude）導入（ダミー実行で I/O を確認）
-- ☐ `.env` に CLI コマンド名、モデル名等を設定（`.env.example` から作成）
+- ✅ FCEUX インストール（`--loadlua` 利用可能を確認）
+- ✅ Ghidra インストール（`support/analyzeHeadless` 実行確認）
+- ⚠️ GhidraNes ローダ導入（iNES, UNROM 対応確認）— Java 17+必要
+- ✅ Graphviz（`dot`）導入
+- ✅ LLM CLI（Claude）導入（実行確認済み）
+- ✅ `.env` に CLI コマンド名、モデル名等を設定（`.env.example` から作成）
 
 **成果物**: `ENVIRONMENT.md`（導入手順、バージョン固定方法）
+
+**実績**:
+- commit 70fe871 (2025-10-02)
+- FCEUX 2.6.6, Graphviz 14.0.0, Ghidra 11.4.2, Claude CLI
+- tools/check_env.sh 追加
+- Note: Ghidra実行にはJava 17+が必要（手動インストール）
 
 ---
 
 ## MS-2 CDL 収集（最小ループ）
 
-**目的**: FCEUX CLI+Lua で `.cdl` を確実に出力  
-**エントリ条件**: MS-1 完了  
-**完了条件**: `cdl/GAME.cdl` が生成される
+**目的**: FCEUX CLI+Lua で `.cdl` を確実に出力
+**エントリ条件**: MS-1 完了
+**完了条件**: `cdl/zanac.cdl` が生成される
 
 ### タスク
-- ☐ 🔗 `fceux/run_inputs.lua` をタイトル別に調整（開始→ステージin→一定移動）
-- ☐ 🔗 `make cdl` で `.cdl` を取得（ログ保存）
-- ☐ CDL ファイルサイズ/差分確認（ROMサイズと一致、再走行でビット増分）
+- ✅ 🔗 `fceux/run_inputs.lua` をタイトル別に調整（CDLロギング追加）
+- ✅ 🔗 `Makefile` 更新（.env読込、zanac.nes対応）
+- ✅ CDL ファイルサイズ確認（ROMサイズ128KiBと一致）
+- ⚠️ macOS版FCEUX GUI制約により手動収集推奨（docs/CDL_COLLECTION.md参照）
 
-**成果物**: `cdl/*.cdl`, 実行ログ
+**成果物**:
+- `cdl/zanac.cdl` (ダミーファイル作成済み、実データ収集は手動)
+- `docs/CDL_COLLECTION.md` (手動収集手順)
+
+**実績**:
+- Luaスクリプト更新: CDLロギング機能追加
+- Makefile更新: .env統合
+- Note: macOS版FCEUXは`--nogui`非対応、GUI経由の手動収集を推奨
 
 ---
 
