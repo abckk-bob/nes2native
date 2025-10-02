@@ -4,10 +4,12 @@
 ツール前提は曖昧化し、コマンド名やフラグは **環境変数で差し替え**できるようにします。
 
 ## 環境変数
-- `CODEX_CMD`  … codex CLI の実行コマンド名（例：`codex`）。
-- `CLAUDE_CMD` … Claude Code の CLI コマンド名（例：`claude`）。
-- `LLM_MODEL`  … 使用モデル（任意）。
-- `LLM_OUTDIR` … 生成物の保存先（例：`out/llm`）。
+- `CODEX_CMD`   … codex CLI の実行コマンド名（例：`codex`）。
+- `CLAUDE_CMD`  … Claude Code の CLI コマンド名（例：`claude`）。
+- `LLM_MODEL`   … 使用モデル（任意）。
+- `LLM_OUTDIR`  … 生成物の保存先（例：`out/llm`）。
+- `SWIFT_OUTDIR` … Swift 移植コードの保存先（既定: `out/swift`）。
+- `KOTLIN_OUTDIR` … Kotlin 移植コードの保存先（既定: `out/kotlin`）。
 
 ## 役割分担（エージェント群）
 1. **Analyzer**  

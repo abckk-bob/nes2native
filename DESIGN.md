@@ -48,6 +48,8 @@ Ghidra Headless + GhidraNes  ──→  UNROMメモリ構築（$8000-$BFFF 可�
 - `out/asm/*.asm`: 関数単位の逆アセン（必要に応じて）
 - `out/meta/labels.json`: I/O ラベル（$2000–$2007 PPU, $4000–$4017 APU, $4016/$4017）
 - `out/meta/cdl_stats.json`: CDL カバレッジの統計
+- `out/swift/`: Swift 移植コード（`SWIFT_OUTDIR` で変更可能）
+- `out/kotlin/`: Kotlin 移植コード（`KOTLIN_OUTDIR` で変更可能）
 
 ## HLE 置換ポリシー（移植先で適用）
 - ハード依存 API を抽象化:
@@ -64,4 +66,3 @@ Ghidra Headless + GhidraNes  ──→  UNROMメモリ構築（$8000-$BFFF 可�
 - **間接分岐/ジャンプテーブル**: CDL と静的解析の両輪でアドレス候補を洗い出し、補助エッジを追加。
 - **自動CFGの限界**: バンク切替はスクリプトで明示補正。ユニットテストで検証。
 - **UNROMの実機差**: 書込時のバス特性差異に注意（ROM内容と同値書込想定の系など）。
-
