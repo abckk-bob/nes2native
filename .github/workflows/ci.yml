@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Validate directory structure
+      run: |
+        test -f README.md
+        test -f DESIGN.md
+        test -f milestones.md
+        test -f Makefile
+        test -d config
+        test -d fceux
+        test -d ghidra/scripts
+        test -d schemas
+        test -d tools
+
+    - name: Validate JSON schemas
+      run: |
+        python3 -m json.tool config/labels.json > /dev/null
+        python3 -m json.tool schemas/callgraph.schema.json > /dev/null
+
+    - name: Check Python scripts syntax
+      run: |
+        python3 -m py_compile tools/merge_cdl.py
+
+    - name: Validate documentation
+      run: |
+        # Check that all referenced files exist
+        grep -o '\`[^`]*\.md\`' README.md | tr -d '`' | while read file; do
+          test -f "$file" || echo "Missing: $file"
+        done
