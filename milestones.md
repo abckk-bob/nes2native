@@ -103,17 +103,23 @@
 
 ## MS-3 CDL 統合・網羅度測定
 
-**目的**: 複数セッションの `.cdl` を OR マージし、カバレッジを定量化  
-**エントリ条件**: MS-2 完了  
+**目的**: 複数セッションの `.cdl` を OR マージし、カバレッジを定量化
+**エントリ条件**: MS-2 完了
 **完了条件**: 主要シーンの C/D ビット ≥ 目標（例: 95%）
 
 ### タスク
-- ☐ シーン別に Lua スクリプトを用意（タイトル/ステージ1/ボス等）
-- ☐ 🔗 `tools/merge_cdl.py` で `.cdl` を OR マージ
-- ☐ `.cdl` を解析し、C/D/アドレス帯（AA）等の統計を `out/meta/cdl_stats.json` に出力
-- 🧪 主要関数領域に Code ビットが立っているかをサンプル確認
+- ⚠️ シーン別に Lua スクリプトを用意（タイトル/ステージ1/ボス等）— 実CDL収集後
+- ✅ 🔗 `tools/merge_cdl.py` で `.cdl` を OR マージ（既存）
+- ✅ 🔗 `tools/analyze_cdl.py` 作成: CDL統計をJSON出力
+- ✅ `.cdl` を解析し、C/D/カバレッジ統計を `out/meta/cdl_stats.json` に出力
+- 🧪 主要関数領域に Code ビットが立っているかをサンプル確認（実CDL収集後）
 
 **成果物**: 統合 `.cdl`、`out/meta/cdl_stats.json`
+
+**実績**:
+- tools/analyze_cdl.py 作成（CDL統計生成）
+- out/meta/cdl_stats.json 生成（ダミーCDLで0%、実データ収集後に更新）
+- Note: 実際のCDL収集は docs/CDL_COLLECTION.md 参照
 
 ---
 
