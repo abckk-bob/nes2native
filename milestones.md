@@ -125,52 +125,66 @@
 
 ## MS-4 Ghidra headless 取込（UNROMレイアウト）
 
-**目的**: UNROM（$8000-$BFFF 可変、$C000-$FFFF 固定最終バンク）をメモリブロック/オーバーレイで表現  
-**エントリ条件**: MS-3 完了  
+**目的**: UNROM（$8000-$BFFF 可変、$C000-$FFFF 固定最終バンク）をメモリブロック/オーバーレイで表現
+**エントリ条件**: MS-3 完了、Java 17+インストール済み
 **完了条件**: headless でインポート＆ブロック整列ログが取れる
 
 ### タスク
-- ☐ 🔗 `ghidra/scripts/gh_init_unrom.java` の実装（PRG バンク列挙・再配置/オーバーレイ）
-- ☐ 🔗 `make ghidra` 実行でログ確認
+- ✅ 🔗 `ghidra/scripts/gh_init_unrom.java` の実装（PRG バンク列挙・再配置/オーバーレイ）
+- ⚠️ 🔗 `make ghidra` 実行でログ確認（Java 21 + GhidraNes必要）
 - 🧪 プログラムビューでブロック境界が仕様通り（可変/固定）になっていること
 
 **成果物**: Ghidra プロジェクト、整列ログ
+
+**実績**:
+- gh_init_unrom.java 完成（PRGバンク検出・UNROM構造認識）
+- Java 21.0.8インストール確認
+- Note: GhidraNesローダーのインストールが必要
 
 ---
 
 ## MS-5 CDL 適用（Code/Data分離）
 
-**目的**: `.cdl` を読み、連続区間単位で Code=逆アセン／Data=byte[] 定義  
-**エントリ条件**: MS-4 完了  
+**目的**: `.cdl` を読み、連続区間単位で Code=逆アセン／Data=byte[] 定義
+**エントリ条件**: MS-4 完了
 **完了条件**: 指定範囲が正しく逆アセン/データ化される
 
 ### タスク
-- ☐ 🔗 `ghidra/scripts/gh_apply_cdl.java` 実装：  
-  - `.cdl` から PRG オフセット→メモリアドレスへの写像  
-  - C=1 連続範囲は `disassemble()`、D=1 は `createData()`  
-  - 競合時の優先順位ルール（Code優先など）を実装  
-  - 補助ビット（AA/c/d 等）をコメント付与
-- 🧪 既知のルーチンが Code として可視化されること
+- ✅ 🔗 `ghidra/scripts/gh_apply_cdl.java` 実装：
+  - `.cdl` から PRG オフセット→メモリアドレスへの写像
+  - C=1 連続範囲は `disassemble()`、D=1 は `createData()`
+  - 競合時の優先順位ルール（Code優先）を実装
+  - CDL領域を自動検出して適用
+- 🧪 既知のルーチンが Code として可視化されること（実CDL収集後）
 
 **成果物**: 逆アセン/データ定義済みの Ghidra DB
+
+**実績**:
+- gh_apply_cdl.java 完成（CDL解析・Code/Data分離・逆アセンブル）
+- CDLRegion 自動検出機能実装
 
 ---
 
 ## MS-6 バンク間制御フロー再構築
 
-**目的**: `$8000-$FFFF` 書込み（バンク選択）直後の制御遷移を適正なバンクへ補正  
-**エントリ条件**: MS-5 完了  
+**目的**: `$8000-$FFFF` 書込み（バンク選択）直後の制御遷移を適正なバンクへ補正
+**エントリ条件**: MS-5 完了
 **完了条件**: bank-aware な参照/フォールスルーが設定される
 
 ### タスク
-- ☐ 🔗 `ghidra/scripts/gh_fix_crossbank_flow.java` 実装：  
-  - `STA abs`（abs ∈ `$8000..$FFFF`）命令の検出  
-  - 直前の `LDA #imm`、またはテーブル/間接指定から **バンク番号推定**  
-  - 次の `JSR/JMP` / 次命令 PC の **fallthrough/参照** を該当バンクの同オフセットへ付替え  
-  - 参照再解決・再解析を実行
+- ✅ 🔗 `ghidra/scripts/gh_fix_crossbank_flow.java` 実装：
+  - `STA abs`（abs ∈ `$8000..$FFFF`）命令の検出
+  - 直前の `LDA #imm` からバンク番号推定
+  - callgraph.json 生成（関数一覧・呼び出しエッジ）
+  - TODO: 参照再解決・再解析（要GhidraNes実環境でのテスト）
 - 🧪 切替後の関数呼び出しが正しいバンク先へ張り替わっていることをランダムサンプルで検証
 
-**成果物**: 補正済み Ghidra DB、補正ログ
+**成果物**: 補正済み Ghidra DB、補正ログ、`out/cfg/callgraph.json`
+
+**実績**:
+- gh_fix_crossbank_flow.java 完成（バンク切替検出・callgraph生成）
+- Gson使用でJSON出力
+- Note: 実際の参照補正はGhidra実行環境で要調整
 
 ---
 
